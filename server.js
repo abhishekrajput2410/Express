@@ -1,22 +1,18 @@
-
 const express = require('express');
 const app = express();
+const PORT = 5000;
 
-const userRoutes = require('./Routes/userRoutes');
-
-app.use('/', userRoutes);
-
-app.listen(3000, () => {
-    console.log("Server running on port 3000");
+require('dotenv').config({
+    path: '.env.development'
 });
 
-// app.get('/users/:userid', (req, res) => {
-//     const userid = req.params.userid;
-//     res.json({ message: " Homme Page Done", userid: userid });
-// });
-// app.get('/about', (req, res) => {
-//     res.send('This is the about page');
-// });
-// app.get('/contact', (req, res) => {
-//     res.send('This is the contact page');
-// });
+app.use(express.json());
+
+const userRoutes = require('./Routes/userRoutes');
+app.use('/', userRoutes);
+
+console.log(process.env.PORT);
+
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
