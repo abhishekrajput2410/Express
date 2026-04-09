@@ -1,57 +1,31 @@
 const express = require('express');
+const cors = require('cors');
+const connectDB = require('./models/db');
+const studentRoutes = require('./routes/studentRoutes');
+
 const app = express();
+const PORT = process.env.PORT || 3000;
 
-// // require('dotenv').config({
-// //     path: '.env.development'
-// // });
-
-// // const PORT = process.env.PORT || 5000;
-
-// // app.use(express.json());
-
-// // const userRoutes = require('./Routes/userRoutes');
-// // app.use('/', userRoutes);
-
-// // app.listen(PORT, () => {
-// //     console.log(`Server running on port ${PORT}`);
-// // });
-
-
-// app.use(express.json());
-
-// const productRoutes = require("./Routes/productRoutes");
-// const userRoutes = require("./Routes/userRoutes");
-// const orderRoutes = require("./Routes/orderRoutes");
-
-
-// app.use("/api/products", productRoutes);
-// app.use("/api/users", userRoutes);
-// app.use("/api/orders", orderRoutes);
-
-// app.get("/", (req, res) => {
-//   res.send("E-Commerce API Running 🚀");
-// });
-
-// const PORT = 5000;
-// app.listen(PORT, () => {
-//   console.log(`Server running on port ${PORT}`);
-// });
-
-require('dotenv').config();
-
+app.use(cors());
 app.use(express.json());
-
-const authRoutes = require('./Routes/authRoutes');
-
-app.use('/api/auth', authRoutes);
+app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
-    res.send('API is running...');
+  res.send('Student API is running. Use /api/students to query the database.');
 });
 
+app.use('/api/students', studentRoutes);
 
-const PORT = process.env.PORT || 5000;
+const startServer = async () => {
+  try {
+    await connectDB();
+    app.listen(PORT, () => {
+      console.log(`Server listening on http://localhost:${PORT}`);
+    });
+  } catch (error) {
+    console.error('Failed to start server:', error);
+    process.exit(1);
+  }
+};
 
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+startServer();
