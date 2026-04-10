@@ -47,7 +47,7 @@ exports.createStudent = async (req, res) => {
     const student = new Student(req.body);
     await student.save();
     res.status(201).json(student);
-  } catch (error) {
+  } catch (error) { 
     res.status(400).json({ error: error.message });
   }
 };
